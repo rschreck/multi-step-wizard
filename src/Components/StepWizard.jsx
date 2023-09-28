@@ -12,7 +12,7 @@ const StepWizard = () => {
       <ul>
         <li>
           <button
-            className={currentStep === 1 ? "button-green" : ""}
+            className={currentStep === 1 ? "w3-button w3-green" : "w3-button "}
             onClick={() => setCurrentStep(1)}
           >
             User Info
@@ -20,7 +20,7 @@ const StepWizard = () => {
         </li>
         <li>
           <button
-            className={currentStep === 2 ? "button-green" : ""}
+            className={currentStep === 2 ? "w3-button w3-green" : "w3-button"}
             onClick={() => setCurrentStep(2)}
           >
             Contact Info
@@ -28,7 +28,7 @@ const StepWizard = () => {
         </li>
         <li>
           <button
-            className={currentStep === 3 ? "button-green" : ""}
+            className={currentStep === 3 ? "w3-button w3-green" : "w3-button"}
             onClick={() => setCurrentStep(3)}
           >
             Address 3

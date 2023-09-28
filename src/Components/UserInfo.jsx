@@ -48,8 +48,8 @@ function UserInfo() {
   };
 
   return (
-    <div className={`${styles.container} container`}>
-      <div className="box">
+    <div className={"w3-container"}>
+      <div className="w3-card-4">
         <h4>User Info</h4>
         {/* <ul>
           {Object.entries(formData).map(([name, value]) => (
@@ -60,35 +60,43 @@ function UserInfo() {
         </ul> */}
         <p>{errorData}</p>
 
-        <form onSubmit={handleSubmit}>
-          <fieldset>
-            <div className="field">
-              <label className="label">Name </label>
-              <input
-                name="name"
-                placeholder="name"
-                className="input"
-                onChange={(e) => {
-                  setFormData(e);
-                  validate(e.target.value, "name");
-                }}
-                value={formData.name || ""}
-              />
-            </div>
-            <div className="field">
-              <label className="label">Age </label>
-              <input
-                name="age"
-                placeholder="age"
-                onChange={(e) => {
-                  setFormData(e);
-                  validate(e.target.value, "age");
-                }}
-                value={formData.age || ""}
-              />
-            </div>
-          </fieldset>
-          <button type="submit" disabled={errorData.length > 0}>
+        <form onSubmit={handleSubmit} className="w3-container">
+          {/* <fieldset> */}
+          <div className="field">
+            <label className="label">Name </label>
+            <input
+              name="name"
+              placeholder="name"
+              className="w3-input"
+              onChange={(e) => {
+                setFormData(e);
+                validate(e.target.value, "name");
+              }}
+              value={formData.name || ""}
+            />
+          </div>
+          <div className="field">
+            <label className="w3-label">Age </label>
+            <input
+              className="w3-input"
+              type="text"
+              name="age"
+              placeholder="age"
+              onChange={(e) => {
+                setFormData(e);
+                validate(e.target.value, "age");
+              }}
+              value={formData.age || ""}
+            />
+          </div>
+          {/* </fieldset> */}
+          <button
+            className={
+              errorData.length > 0 ? "w3-button w3-grey" : "w3-button w3-green"
+            }
+            type="submit"
+            disabled={errorData.length > 0}
+          >
             Next
           </button>
         </form>
