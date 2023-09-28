@@ -1,5 +1,7 @@
 import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./index.module.css";
+
 const formReducer = (state, event) => {
   return {
     ...state,
@@ -46,49 +48,51 @@ function UserInfo() {
   };
 
   return (
-    <div>
-      <h1>User Info</h1>
-      <div>
-        You are submitting the following:
-        <ul>
+    <div className={`${styles.container} container`}>
+      <div className="box">
+        <h4>User Info</h4>
+        {/* <ul>
           {Object.entries(formData).map(([name, value]) => (
             <li key={name}>
               <strong>{name}</strong>:{value.toString()}
             </li>
           ))}
-        </ul>
+        </ul> */}
         <p>{errorData}</p>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <label>
-            <p>Name</p>
-            <input
-              name="name"
-              onChange={(e) => {
-                setFormData(e);
-                validate(e.target.value, "name");
-              }}
-              value={formData.name || ""}
-            />
-          </label>
 
-          <label>
-            <p>Age</p>
-            <input
-              name="age"
-              onChange={(e) => {
-                setFormData(e);
-                validate(e.target.value, "age");
-              }}
-              value={formData.age || ""}
-            />
-          </label>
-        </fieldset>
-        <button type="submit" disabled={errorData.length > 0}>
-          Next
-        </button>
-      </form>
+        <form onSubmit={handleSubmit}>
+          <fieldset>
+            <div className="field">
+              <label className="label">Name </label>
+              <input
+                name="name"
+                placeholder="name"
+                className="input"
+                onChange={(e) => {
+                  setFormData(e);
+                  validate(e.target.value, "name");
+                }}
+                value={formData.name || ""}
+              />
+            </div>
+            <div className="field">
+              <label className="label">Age </label>
+              <input
+                name="age"
+                placeholder="age"
+                onChange={(e) => {
+                  setFormData(e);
+                  validate(e.target.value, "age");
+                }}
+                value={formData.age || ""}
+              />
+            </div>
+          </fieldset>
+          <button type="submit" disabled={errorData.length > 0}>
+            Next
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
