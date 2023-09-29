@@ -137,6 +137,7 @@ function ContactInfo() {
             />
           </div>
           <button
+            type="button"
             className={
               errors.length > 0 ? "w3-button w3-grey" : "w3-button w3-green"
             }
