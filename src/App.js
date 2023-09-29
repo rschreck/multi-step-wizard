@@ -2,7 +2,7 @@ import "./App.css";
 import { createContext, useContext } from "react";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Contact } from "./Components/Contact";
+import { ContactInfo } from "./Components/ContactInfo";
 import { UserInfo } from "./Components/UserInfo";
 import { AddressInfo } from "./Components/AddressInfo";
 import { StepWizard } from "./Components/StepWizard";
@@ -18,7 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<StepWizard />} />
             <Route path="/user" element={<UserInfo />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/contact" element={<ContactInfo />} />
             <Route path="/address" element={<AddressInfo />} />
           </Routes>
         </Router>

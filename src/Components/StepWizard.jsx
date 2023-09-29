@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { UserInfo } from "./UserInfo";
-import { Contact } from "./Contact";
+import { ContactInfo } from "./ContactInfo";
 import { AddressInfo } from "./AddressInfo";
 
 const StepWizard = () => {
@@ -37,7 +37,7 @@ const StepWizard = () => {
       </ul>
       <div>
         {currentStep === 1 && <UserInfo />}
-        {currentStep === 2 && <Contact />}
+        {currentStep === 2 && <ContactInfo />}
         {currentStep === 3 && <AddressInfo />}
       </div>
     </div>

@@ -1,6 +1,5 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./index.module.css";
 
 const formReducer = (state, event) => {
   return {
@@ -16,52 +15,81 @@ function UserInfo() {
     formReducer,
     JSON.parse(initialData) || {}
   );
-  const [errorData, setErrorData] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const validate = (value, type = "name") => {
     const errMessage = `Incorrect ${type}`;
+    let result = false;
     switch (type) {
       case "name":
-        if (value.length <= 0 || value.length >= 50) {
-          setErrorData([...new Set([...errorData, errMessage])]);
+        if (value?.length <= 0 || value?.length >= 50) {
+          setErrors({ ...errors, [type]: errMessage });
         } else {
-          setErrorData([...errorData?.filter((e) => e !== errMessage)]);
+          setErrors({ ...errors, [type]: null });
+          result = true;
         }
         break;
       case "age":
         if (typeof value === "number" || parseInt(value) > 0) {
-          setErrorData([...errorData?.filter((e) => e !== errMessage)]);
+          setErrors({ ...errors, [type]: null });
+          result = true;
         } else {
-          setErrorData([...new Set([...errorData, errMessage])]);
+          setErrors({ ...errors, [type]: errMessage });
+        }
+        break;
+      case "gender":
+        if (options.includes(value)) {
+          setErrors({ ...errors, [type]: null });
+          result = true;
+        } else {
+          setErrors({ ...errors, [type]: errMessage });
         }
         break;
       default:
         break;
     }
+    return result;
   };
 
-  const handleSubmit = (event) => {
-    setErrorData(null);
-    event.preventDefault();
+  //   const validateForm = () => {
+  //     const fields = ["age", "name", "gender"];
+  //     for (let i = 0; i < fields.length; i++) {
+  //       console.log(fields[i], formData[fields[i]]);
+  //       if (formData[fields[i]]) {
+  //         return validate(formData[fields[i]], fields[i]);
+  //       } else {
+  //         return false;
+  //       }
+  //     }
+  //   };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const { name, age, gender } = formData;
+    if (!name) {
+      setErrors({ name: "Please enter your name" });
+    } else if (!age) {
+      setErrors({ age: "Please enter your age" });
+    } else if (!gender) {
+      setErrors({ gender: "Please enter gender" });
+    } else {
+      navigate("/contact");
+    }
+  };
+
+  const options = ["Male", "Female"];
+  const onOptionChangeHandler = (e) => {
+    setFormData(e);
+    validate(e.target.value, "gender");
+  };
+  useEffect(() => {
     localStorage.setItem("user-info", JSON.stringify(formData));
-    navigate("/contact");
-  };
-
+  }, [formData]);
   return (
     <div className={"w3-container"}>
       <div className="w3-card-4">
         <h4>User Info</h4>
-        {/* <ul>
-          {Object.entries(formData).map(([name, value]) => (
-            <li key={name}>
-              <strong>{name}</strong>:{value.toString()}
-            </li>
-          ))}
-        </ul> */}
-        <p>{errorData}</p>
 
-        <form onSubmit={handleSubmit} className="w3-container">
-          {/* <fieldset> */}
+        <form onSubmit={onSubmit} className="w3-container">
           <div className="field">
             <label className="label">Name </label>
             <input
@@ -89,16 +117,34 @@ function UserInfo() {
               value={formData.age || ""}
             />
           </div>
-          {/* </fieldset> */}
+          <div className="field">
+            <label className="w3-label">Gender </label>
+            <select
+              className="w3-select w3-border"
+              onChange={onOptionChangeHandler}
+              name="gender"
+              value={formData.gender}
+            >
+              <option>Please choose one option</option>
+              {options.map((option, index) => {
+                return <option key={index}>{option}</option>;
+              })}
+            </select>
+          </div>
+
           <button
             className={
-              errorData.length > 0 ? "w3-button w3-grey" : "w3-button w3-green"
+              errors.length > 0 ? "w3-button w3-grey" : "w3-button w3-green"
             }
             type="submit"
-            disabled={errorData.length > 0}
+            disabled={errors.length > 0 ? true : false}
           >
             Next
           </button>
+
+          {errors.name && <p>{errors.name}</p>}
+          {errors.age && <p>{errors.age}</p>}
+          {errors.gender && <p>{errors.gender}</p>}
         </form>
       </div>
     </div>
