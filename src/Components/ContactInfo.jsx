@@ -92,7 +92,6 @@ function ContactInfo() {
     } else if (!email) {
       setErrors({ email: "Please enter your email" });
     } else {
-      //navigate("/address");
       updateStep2();
     }
   };
