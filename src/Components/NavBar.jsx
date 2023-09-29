@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useStep } from "./context";
 
 const Navbar = () => {
-  const [showNavbar, setShowNavbar] = useState(false);
+  const [showNavbar] = useState(false);
   const [state] = useStep();
   return (
     <nav className="navbar">
