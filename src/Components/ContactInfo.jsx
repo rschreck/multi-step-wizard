@@ -86,7 +86,7 @@ function ContactInfo() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { phone, email, etc } = formData;
+    const { phone, email } = formData;
     if (!phone) {
       setErrors({ phone: "Please enter your phone" });
     } else if (!email) {
