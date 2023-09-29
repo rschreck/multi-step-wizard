@@ -1,5 +1,6 @@
 import React, { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { StepWizard } from "./NavBar";
 
 const formReducer = (state, event) => {
   return {
