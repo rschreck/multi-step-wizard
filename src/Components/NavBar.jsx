@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { UserInfo } from "./UserInfo";
-import { ContactInfo } from "./ContactInfo";
-import { AddressInfo } from "./AddressInfo";
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-  const [showNavbar, setShowNavbar] = React.useState(false);
+  const [showNavbar, setShowNavbar] = useState(false);
 
   return (
     <nav className="navbar">
