@@ -1,6 +1,6 @@
 import React, { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { StepWizard } from "./NavBar";
+import { useStep } from "./context";
 
 const formReducer = (state, event) => {
   return {
@@ -11,6 +11,13 @@ const formReducer = (state, event) => {
 
 function ContactInfo() {
   const navigate = useNavigate();
+  const [state, setState] = useStep();
+  console.log("contact", state);
+  const updateStep2 = () => {
+    setState({ ...state, step2: true });
+    console.log("state", state);
+    navigate("/address");
+  };
   const initialData = localStorage.getItem("contact-info");
   const [formData, setFormData] = useReducer(
     formReducer,
@@ -85,7 +92,8 @@ function ContactInfo() {
     } else if (!email) {
       setErrors({ email: "Please enter your email" });
     } else {
-      navigate("/address");
+      //navigate("/address");
+      updateStep2();
     }
   };
 

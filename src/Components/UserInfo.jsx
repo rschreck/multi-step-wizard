@@ -1,6 +1,6 @@
 import React, { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useStep } from "./context";
 const formReducer = (state, event) => {
   return {
     ...state,
@@ -9,6 +9,12 @@ const formReducer = (state, event) => {
 };
 
 function UserInfo() {
+  const [state, setState] = useStep();
+  const updateStep1 = () => {
+    setState({ ...state, step1: true });
+    console.log("state", state);
+    navigate("/contact");
+  };
   const navigate = useNavigate();
   const initialData = localStorage.getItem("user-info");
   const [formData, setFormData] = useReducer(
@@ -72,7 +78,7 @@ function UserInfo() {
     } else if (!gender) {
       setErrors({ gender: "Please enter gender" });
     } else {
-      navigate("/contact");
+      updateStep1(state);
     }
   };
 
