@@ -1,6 +1,5 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { StepWizard } from "./StepWizard";
 
 const formReducer = (state, event) => {
   return {
@@ -16,102 +15,144 @@ function ContactInfo() {
     formReducer,
     JSON.parse(initialData) || {}
   );
-  const [errorData, setErrorData] = useState([]);
+  const [errors, setErrors] = useState({});
 
-  const validate = (value, type = "name") => {
+  function validatePhoneNumber(phoneNumber) {
+    // Check if the phone number is empty
+    if (phoneNumber === "") {
+      return false;
+    }
+
+    // Check if the phone number is 10 digits long
+    if (phoneNumber.length !== 10) {
+      return false;
+    }
+
+    // Check if the phone number starts with a 1
+    if (phoneNumber.charAt(0) !== "1") {
+      return false;
+    }
+
+    // Check if the phone number contains only digits
+    for (var i = 0; i < phoneNumber.length; i++) {
+      if (isNaN(phoneNumber.charAt(i))) {
+        return false;
+      }
+    }
+
+    // The phone number is valid
+    return true;
+  }
+
+  const validateEmail = (email) => {
+    return email.match(
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+  };
+
+  const validate = (value, type = "phone") => {
     const errMessage = `Incorrect ${type}`;
+    let result = false;
     switch (type) {
-      case "name":
-        if (value.length <= 0 || value.length >= 50) {
-          setErrorData([...new Set([...errorData, errMessage])]);
+      case "phone":
+        if (validatePhoneNumber(value)) {
+          setErrors({ ...errors, [type]: errMessage });
         } else {
-          setErrorData([...errorData?.filter((e) => e !== errMessage)]);
+          setErrors({ ...errors, [type]: null });
+          result = true;
         }
         break;
-      case "age":
-        if (typeof value === "number" || parseInt(value) > 0) {
-          setErrorData([...errorData?.filter((e) => e !== errMessage)]);
+      case "email":
+        if (validateEmail(value)) {
+          setErrors({ ...errors, [type]: null });
+          result = true;
         } else {
-          setErrorData([...new Set([...errorData, errMessage])]);
+          setErrors({ ...errors, [type]: errMessage });
         }
         break;
       default:
         break;
     }
+    return result;
   };
 
-  const handleSubmit = (event) => {
-    setErrorData(null);
-    event.preventDefault();
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const { phone, email, etc } = formData;
+    if (!phone) {
+      setErrors({ phone: "Please enter your phone" });
+    } else if (!email) {
+      setErrors({ email: "Please enter your email" });
+    } else {
+      navigate("/address");
+    }
+  };
+
+  useEffect(() => {
     localStorage.setItem("contact-info", JSON.stringify(formData));
-    navigate("/address");
-  };
-
-  const btnPrevClick = (event) => {
-    navigate("/user");
-  };
-
+  }, [formData]);
   return (
     <div className={"w3-container"}>
       <div className="w3-card-4">
         <h4>Contact Info</h4>
-        {/* <ul>
-          {Object.entries(formData).map(([name, value]) => (
-            <li key={name}>
-              <strong>{name}</strong>:{value.toString()}
-            </li>
-          ))}
-        </ul> */}
-        <p>{errorData}</p>
-
-        <form onSubmit={handleSubmit} className="w3-container">
-          {/* <fieldset> */}
+        <form onSubmit={onSubmit} className="w3-container">
           <div className="field">
-            <label className="label">Name </label>
+            <label className="label">Phone </label>
             <input
-              name="name"
-              placeholder="name"
+              type="tel"
+              id="phone"
+              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              name="phone"
+              required
               className="w3-input"
               onChange={(e) => {
                 setFormData(e);
-                validate(e.target.value, "name");
+                validatePhoneNumber(e.target.value);
               }}
-              value={formData.name || ""}
+              value={formData.phone || ""}
             />
           </div>
-          <div>
-            <label className="w3-label">Age </label>
+          <div className="field">
+            <label className="w3-label">Email </label>
             <input
               className="w3-input"
-              type="text"
-              name="age"
-              placeholder="age"
+              name="email"
+              type="email"
+              id="email"
+              size="30"
+              required
               onChange={(e) => {
                 setFormData(e);
-                validate(e.target.value, "age");
+                validate(e.target.value, "email");
               }}
-              value={formData.age || ""}
+              value={formData.email || ""}
             />
           </div>
-          {/* </fieldset> */}
           <button
             className={
-              errorData.length > 0 ? "w3-button w3-grey" : "w3-button w3-green"
+              errors.length > 0 ? "w3-button w3-grey" : "w3-button w3-green"
             }
-            onClick={btnPrevClick}
-            disabled={errorData.length > 0}
+            onClick={(e) => {
+              //go to User Info
+              console.log("Go to UserInfo");
+              navigate("/user");
+            }}
+            disabled={errors.length > 0 ? true : false}
           >
             Previous
           </button>
           <button
             className={
-              errorData.length > 0 ? "w3-button w3-grey" : "w3-button w3-green"
+              errors.length > 0 ? "w3-button w3-grey" : "w3-button w3-green"
             }
             type="submit"
-            disabled={errorData.length > 0}
+            disabled={errors.length > 0 ? true : false}
           >
             Next
           </button>
+
+          {errors.phone && <p>{errors.phone}</p>}
+          {errors.email && <p>{errors.email}</p>}
         </form>
       </div>
     </div>
