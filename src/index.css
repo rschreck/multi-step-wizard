@@ -67,3 +67,7 @@ li {
   height: 2px;
   background-color: #574c4c;
 }
+
+.disabled-link {
+  pointer-events: none;
+}
